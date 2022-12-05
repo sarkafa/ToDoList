@@ -1,20 +1,18 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <form method="post">
+    <form method="post" style="width:50%;">
         <label for="title">Name</label>
         <br>
-        <input type="text" name="id"
+        <input type="text" name="id" style="width:100%;"
                placeholder="Task name"
                value="{{ request.form['id'] }}"></input>
         <br>
 
         <label for="text">Task name</label>
         <br>
-        <textarea name="text"
-                  placeholder="Task text"
-                  rows="15"
-                  cols="20"
+        <textarea name="text" rows=15 style="width:100%;"
+                          placeholder="Task text"
                   >{{ request.form['text'] }}</textarea>
         <br>
         <label for="deadline">Deadline:</label>

@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <title>{% block title %} {% endblock %} - TODO LIST</title>
+    <title>Todo List</title>
     <style>
       .task {
         padding: 10px;
@@ -31,7 +31,14 @@
       }
     </style>
   </head>
-  <body style="width: 60%; margin: auto; padding-top: 20px">
+  <body
+    style="
+      width: 60%;
+      margin: auto;
+      padding-top: 20px;
+      font-family: Arial, Helvetica, sans-serif;
+    "
+  >
     <nav>
       <a href="{{ url_for('list_todos') }}">Todo List</a>
       <a href="{{ url_for('post_todo') }}">Add New Task</a>

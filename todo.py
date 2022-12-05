@@ -36,6 +36,15 @@ class Todo(db.Model):
             'deadline': self.deadline,
         }
 
+def convert_date(date_str):
+    try:
+        formatted_date = datetime.strptime(date_str,"%Y-%m-%d")
+    except Exception:
+        return
+    else:
+        return formatted_date
+
+@app.route("/")
 @app.route("/todos")
 def list_todos():
     where = []
@@ -49,11 +58,15 @@ def list_todos():
             where.append(Todo.status == status)
 
     if date_from := request.args.get('date_from'):
-        date_from = datetime.strptime(date_from,"%Y-%m-%d")
+        date_from = convert_date(date_from)
+        if not date_from:
+            return 'Invalid date format', 400 
         where.append(Todo.created >= date_from)
 
     if date_to := request.args.get('date_to'):
-        date_to = datetime.strptime(date_to,"%Y-%m-%d")
+        date_to = convert_date(date_to)
+        if not date_to:
+            return 'Invalid date format', 400 
         where.append(Todo.created <= date_to)
 
     order_by_param = request.args.get('order_by', 'urgency+')
@@ -68,9 +81,9 @@ def list_todos():
         try: 
             count = int(count)
         except ValueError:
-            pass
+            return 'Invalid count argumetn', 400
         else:
-            query = query.limit(count)
+            query = query[:count]
 
     todos = [todo.to_dict() for todo in query]
     return render_template('index.html', tasks=todos)
@@ -89,7 +102,9 @@ def post_todo():
 
         else:
             if deadline := request.form.get('deadline'):
-                deadline = datetime.strptime(deadline,"%Y-%m-%d")
+                deadline = convert_date(deadline)
+                if not deadline:
+                    return 'Invalid date format', 400 
             else:
                 deadline = None
 
