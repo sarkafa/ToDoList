@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>{% block title %} {% endblock %} - TODO LIST</title>
+    <style>
+      .task {
+        padding: 10px;
+        margin: 5px;
+        background-color: #f3f3f3;
+      }
+      nav {
+        display: flex;
+        justify-content: space-between;
+      }
+      nav a {
+        color: #115277;
+        font-size: 3em;
+        text-decoration: none;
+      }
+
+      nav a:hover {
+        background-color: #ddd;
+      }
+
+      .alert {
+        padding: 20px;
+        margin: 5px;
+        color: #c92626;
+        background-color: #f3f3f3;
+      }
+    </style>
+  </head>
+  <body style="width: 60%; margin: auto; padding-top: 20px">
+    <nav>
+      <a href="{{ url_for('list_todos') }}">Todo List</a>
+      <a href="{{ url_for('post_todo') }}">Add New Task</a>
+    </nav>
+    <hr />
+    <div class="content">
+      {% for message in get_flashed_messages() %}
+      <div class="alert">{{ message }}</div>
+      {% endfor %} {% block content %} {% endblock %}
+    </div>
+  </body>
+</html>

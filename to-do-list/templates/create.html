@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <form method="post">
+        <label for="title">Name</label>
+        <br>
+        <input type="text" name="id"
+               placeholder="Task name"
+               value="{{ request.form['id'] }}"></input>
+        <br>
+
+        <label for="text">Task name</label>
+        <br>
+        <textarea name="text"
+                  placeholder="Task text"
+                  rows="15"
+                  cols="20"
+                  >{{ request.form['text'] }}</textarea>
+        <br>
+        <label for="deadline">Deadline:</label>
+        <input type="date" name="deadline" 
+            value="{{ request.form['deadline'] }}"
+            min="2022-11-01" max="2024-12-31">
+        <br>
+        <button type="submit">Submit</button>
+    </form>
+{% endblock %}

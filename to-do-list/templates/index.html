@@ -1,0 +1,117 @@
+{% extends 'base.html' %} {% block content %}
+<style>
+  #todo-list {
+    margin-top: 20px;
+  }
+  #todos {
+    font-family: Arial, Helvetica, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+  }
+
+  #todos td,
+  #todos th {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: center;
+  }
+
+  #todos tr:nth-child(even) {
+    background-color: #f2f2f2;
+  }
+
+  #todos tr:hover {
+    background-color: #ddd;
+  }
+
+  #todos th {
+    padding-top: 12px;
+    padding-bottom: 12px;
+    background-color: #115277;
+    color: white;
+  }
+</style>
+
+<form id="todo-list" method="get" action="?status=&date_from=&date_to=">
+  <label for="status">Status:</label>
+  <select id="status" name="status" type="hidden">
+    <option value=>----</option>
+    <option value="1">is done</option>
+    <option value="0">not done</option>
+  </select>
+
+  <label for="date_from">From:</label>
+  <input type="date" name="date_from" min="2022-11-01" max="2024-12-31" />
+
+  <label for="date_to">To:</label>
+  <input type="date" name="date_to" min="2022-11-01" max="2024-12-31" />
+
+  <button type="submit">Filter</button>
+</form>
+<br />
+<table id="todos">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Text</th>
+      <th>Created</th>
+      <th>Is Done</th>
+      <th>Deadline</th>
+      <th></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    {% for task in tasks|sort(attribute=sort_name|default('created'),
+    reverse=sort_order|default(False)) %}
+    <tr>
+      <td>{{ task.id }}</td>
+      <td>{{ task.text }}</td>
+      <td>{{ task.created.strftime('%Y-%m-%d') }}</td>
+      <td>
+        <form
+          id="{{task.id}}"
+          method="post"
+          action="{{ url_for('set_status', todo_id=task.id) }}"
+        >
+          {% if task.status %}
+          <input
+            type="checkbox"
+            name="set-done"
+            checked
+            onchange="document.getElementById('{{task.id}}').submit()"
+          />
+          {% else %}
+          <input
+            type="checkbox"
+            name="set-done"
+            onchange="document.getElementById('{{task.id}}').submit()"
+          />
+          {% endif %}
+        </form>
+      </td>
+
+      <td>
+        {% if task.deadline %} {{ task.deadline.strftime('%Y-%m-%d')}} {% else
+        %} {{''}} {% endif %}
+      </td>
+      <td>
+        <form
+          id="delete{{task.id}}"
+          method="post"
+          action="{{ url_for('delete_todo', todo_id=task.id) }}"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" 
+          onclick="document.getElementById('delete{{task.id}}').submit()" 
+          width="24" 
+          height="24" 
+          viewBox="0 0 24 24"
+          cursor=pointer>
+          <path d="M3 6v18h18v-18h-18zm5 14c0 .552-.448 1-1 1s-1-.448-1-1v-10c0-.552.448-1 1-1s1 .448 1 1v10zm5 0c0 .552-.448 1-1 1s-1-.448-1-1v-10c0-.552.448-1 1-1s1 .448 1 1v10zm5 0c0 .552-.448 1-1 1s-1-.448-1-1v-10c0-.552.448-1 1-1s1 .448 1 1v10zm4-18v2h-20v-2h5.711c.9 0 1.631-1.099 1.631-2h5.315c0 .901.73 2 1.631 2h5.712z"/></svg>
+        </form>
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}
