@@ -1,9 +1,8 @@
 =================
 TODO LIST demo app
 =================
-.. code:: sh
+
+To run the app:
 
     pip install -r requirements.txt
     flask --app todo_list/todo run
-
-Then run the server
